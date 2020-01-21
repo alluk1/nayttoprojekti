@@ -3,7 +3,7 @@
 #define Moottori2 6
 #define Moottori2Suunta 7
 
-//void setup() {
+void setup() {
  pinMode(Moottori1,OUTPUT);
  pinMode(Moottori2,OUTPUT);
  pinMode(Moottori1Suunta,OUTPUT);
@@ -14,13 +14,13 @@ void stopCar(){
   digitalWrite(Moottori2, LOW);
 }
 
-
 void forward(){
   digitalWrite(Moottori1Suunta, LOW);
   digitalWrite(Moottori2Suunta, LOW);
   digitalWrite(Moottori1, HIGH);
   digitalWrite(Moottori2, HIGH);
 }
+
 void backward(){
   digitalWrite(Moottori1, HIGH);
   digitalWrite(Moottori2, HIGH);
@@ -28,12 +28,11 @@ void backward(){
   digitalWrite(Moottori2Suunta, HIGH);
 }
 
-
 void loop() {
   forward();
-  delay(10000);
+  delay(5000);
   backward();
-  delay(10000);
+  delay(5000);
   stopCar();
-  delay(10000);
+  delay(5000);
 }
