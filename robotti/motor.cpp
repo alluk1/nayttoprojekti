@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include "motor.h"
 
-//Constructor
-motor::motor(int pSP, int pEN, int pDIR){
+
+motor::motor(int pSP, int pEN, int pDIR){   //Konstruktori, vastaa void setuppia
   _pSP = pSP;
   _pEN = pEN;
   _pDIR = pDIR;

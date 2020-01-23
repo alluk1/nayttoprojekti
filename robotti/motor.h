@@ -5,8 +5,8 @@
 class motor
 {
   public:
-    motor(int pSP, int pEN, int pDIR);//Constructor
-    motor(int pSP, int pEN, int pDIR, char MaxSpeed);//Constructor
+    motor(int pSP, int pEN, int pDIR);//Konstruktori
+    motor(int pSP, int pEN, int pDIR, char MaxSpeed);//Konstruktori
     void FW();
     void BW();
     void Start();
