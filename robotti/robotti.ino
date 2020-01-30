@@ -4,7 +4,7 @@
 #define echo 12
 
 motor M1(9, 5, 4);// ykkös moottoria ohjaavat pinnit
-motor M2(10, 6, 7, 230 );// 2. moottorin pinnit nopeuden asetus(230)
+motor M2(10, 6, 7, 230 );// 2. moottorin pinnit, nopeuden asetus(230)
 
 void setup() {
   pinMode(echo, INPUT); //Etäisyysmittari sisääntulo
@@ -36,20 +36,29 @@ void CRAWL(){              //moottoreiden funktiot, Eteen, Taakse, jne.
 
 long dists[5]={0}; //luodaan taulukko
 int index=0;
+bool sendTrig=true;
+bool waitForPulse=false;
+unsigned long trigTime;
 void loop() {
   unsigned long duration=0, distance;
-  digitalWrite(trig,HIGH); 
-  delayMicroseconds(10);
-  digitalWrite(trig, LOW);
-  dists[index++]=pulseIn(echo, HIGH); //toistuva funktio joka kerää,-
-  if(index==5){                       //etäisyyksiä taulukkoon
-    index=0; //kun 5 solua on täynnä, lasekminen alkaa alusta
-  }
-  for(int i=0;i<5;i++){             
-    duration += dists[i]; 
-  }                                  
-  distance =((duration/5)*0.034/2); //jaetaan solujen tulos viidellä,-
-  //jotta saadaan keskiarvo (suodattaaksemme häiriöt)
+  if(sendTrig){               
+    digitalWrite(trig,HIGH);          //lähetetään pulssi ja odotetaan-
+    trigTime=micros();                //10 microsekuntia
+    sendTrig=false;                      
+  }else if((micros()-trigTime)>=10){      
+    //delayMicroseconds(10);
+    waitForPulse=true;
+    digitalWrite(trig, LOW);
+    dists[index++]=pulseIn(echo, HIGH); //toistuva funktio joka kerää,-
+    if(index==5){                       //etäisyyksiä taulukkoon
+      index=0; //kun 5 solua on täynnä, lasekminen alkaa alusta
+    }
+    for(int i=0;i<5;i++){   //tulokset syötetään 0->1->2->3->4 soluihin
+      duration += dists[i]; //etäisyysdata lisätään taulukkoon
+    }                                  
+    distance =((duration/5)*0.034/2); //jaetaan solujen tulos viidellä,-
+  } //jotta saadaan keskiarvo ja muutetaan lukema senttimetreiksi
+  
   if (distance > 40){ // jos matka on yli 40cm, auto menee eteenpäin
     FW();                   // 
   }else if (distance < 5){  // jos matka on alle 5cm, auto pysähtyy ja vaihtaa-
